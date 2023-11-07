@@ -1,0 +1,29 @@
+bert:
+    atom_vocab_size: 18
+    nmr_vocab_size: 1801
+    embed_dim: 256
+    ffn_dim: 512
+    head: 4
+    encoder_layers: 6
+    p: 0.1
+    nmr:
+train:
+    batch_size: 256
+    num_workers: 4
+    AdamW:
+        lr: 1.0e-04
+        beta1: 0.9
+        beta2: 0.999
+        eps: 1.0e-08
+    epochs: 20
+dataset:
+    dataset_path: /home/zjh/mr/pretrain/dataset/pretrain_dataset.pth
+    mol_fix_len: 256
+    num_workers: 4
+    split: [8,1,1]
+    stratify:
+device: cuda:1
+res_dir:
+log_path:
+res_path:
+seed: 42

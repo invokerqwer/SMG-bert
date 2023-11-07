@@ -1,0 +1,25 @@
+V1 : 这个就是mg-bert
+V2 : 引入3D 信息，只预测距离（不重建3D 的原子)
+V3 : 引入3D 信息， 距离 + 重建
+V4 : 引入3D 信息,所有的都用上，包括gcn 也显示加入； train 不起来
+V5 : 引入3D 信息,所有的都用上，除了不用gcn matrix; train 不起来
+V6 ：引入3D 信息 没有loss_adj 不用gcn matrix train 起来了
+v7: 引入3D 信息 没有loss_adj 使用gcn
+v8: 这个就是mg-bert+gcn
+v9 : 引入3D 信息， 距离 + 重建 + angle
+v10 : 引入3D 信息， 距离 + 重建 + torsion
+
+v11 1D + 2D mgbert
+
+
+v6 v7 验证3D 下gcn作用
+
+v1 v8 验证2D 下gcn作用
+
+v1 v11 验证 1D作用
+
+V2 V3 V9 V10 V6验证3D各个loss项的作用
+
+V4 v7 验证loss_adj
+
+

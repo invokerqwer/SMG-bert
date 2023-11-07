@@ -1,0 +1,78 @@
+
+
+conda activate mr_bert
+cd /home/zjh/remote/mrbert/V4
+tensorboard --logdir=./tensorboard --bind_all
+
+
+# 直接 有nmr
+python run.py --config_path ./config.yml --device "cuda:3" --res_dir /home/zjh/mr/res/V1  --nmr &
+python run.py --config_path ./config.yml --device "cuda:4" --res_dir /home/zjh/mr/res/V1 --nmr --task_type classify &
+
+
+# 直接 nmr
+python run.py --config_path ./config.yml --device "cuda:5" --res_dir /home/zjh/mr/res/V1  --nmr &
+python run.py --config_path ./config.yml --device "cuda:6" --res_dir /home/zjh/mr/res/V1 --nmr --task_type classify &
+
+
+
+
+# 微调2D 有nmr
+python run.py --config_path ./config.yml --device "cpu" --res_dir /home/zjh/mr/res_fine/V1 --pretrain_model_path /home/zjh/mr/res_pretrain/V1/19.pth --nmr &
+python run.py --config_path ./config.yml --device "cpu" --res_dir /home/zjh/mr/res_fine/V1 --pretrain_model_path /home/zjh/mr/res_pretrain/V1/19.pth --nmr --tast_type classify &
+
+# 微调2D 无nmr
+python run.py --config_path ./config.yml --device "cuda:5" --res_dir /home/zjh/mr/res_fine/V1_noNMR--pretrain_model_path /home/zjh/mr/res_pretrain/V1_noNMR/19.pth &
+python run.py --config_path ./config.yml --device "cuda:4" --res_dir /home/zjh/mr/res_fine/V1_noNMR --pretrain_model_path /home/zjh/mr/res_pretrain/V1_noNMR/19.pth --task_type classify &
+
+
+
+
+
+
+# 预训练有NMR
+python run_pretrain.py --config_path ./config_pretrain.yml --device "cuda:1" --res_dir /home/zjh/mr/res_pretrain/V1 --nmr --lr 0.0001 &
+
+
+# 预训练无NMR
+python run_pretrain.py --config_path ./config_pretrain.yml --device "cuda:2" --res_dir /home/zjh/mr/res_pretrain/V1_noNMR --lr 0.0001
+
+
+
+# 预训练3D
+python run_pretrain.py --config_path ./config_pretrain_3D.yml --device "cuda:1" --res_dir /home/zjh/mr/res_pretrain/V1_3D --type 3D --nmr --pos_info --lr=0.0001
+python run_pretrain.py --config_path ./config_pretrain_3D.yml --device "cuda:1" --res_dir /home/zjh/mr/res_pretrain/V1_3D_noNMR --type 3D --pos_info --lr=0.0001
+python run_pretrain.py --config_path ./config_pretrain_3D.yml --device "cuda:1" --res_dir /home/zjh/mr/res_pretrain/V1_3D_noPOS --type 3D --nmr --lr=0.0001
+python run_pretrain.py --config_path ./config_pretrain_3D.yml --device "cuda:1" --res_dir /home/zjh/mr/res_pretrain/V1_3D_noBOTH --type 3D --lr=0.0001
+python run_pretrain.py --config_path ./config_pretrain_3D.yml --device "cuda:1" --res_dir /home/zjh/mr/res_pretrain/V1_3D_lr10 --type 3D --nmr --pos_info --lr=10
+
+
+2023-03-06 19:41:04,878 - utils - INFO - model_save_dir:/home/zjh/mr/res/downstream/V0/BBBP,log_path:/home/zjh/mr/res/downstream/V0/BBBP/BBBP.log,res_path:/home/zjh/mr/res/downstream/V0/BBBP/BBBP.csv, config{'pretrain_model_path': '', 'bert': {'atom_vocab_size': 18, 'embed_dim': 128, 'ffn_dim': 512, 'head': 4, 'spec_endoder_layers': 2, 'encoder_layers': 4, 'p': 0.1, 'use_3D': True, 'use_1D': False, 'use_adj_ssl': False, 'task_type': 'classify', 'represent_type': '3D'}, 'train': {'batch_size': 16, 'num_workers': 4, 'AdamW': {'lr': 0.0001, 'beta1': 0.9, 'beta2': 0.999, 'eps': 1e-08}, 'epochs': 30, 'use_gnn_adj': False, 'mask_ratio': 0.2}, 'dataset': {'smiles_data_path': '/home/zjh/mr/downstream/dataset/classify/BBBP/smiles.pth', 'dist_data_path': '/home/zjh/mr/downstream/dataset/classify/BBBP/dist.pth', 'angle_data_path': '/home/zjh/mr/downstream/dataset/classify/BBBP/angle.pth', 'torsion_data_path': '/home/zjh/mr/downstream/dataset/classify/BBBP/torsion.pth', 'label_data_path': '/home/zjh/mr/downstream/dataset/classify/BBBP/label.pth', 'mol_fix_len': 128, 'num_workers': 0, 'split': [8, 1, 1], 'split_type': 'scaffold', 'pin_memory': True}, 'device': 'cuda:1', 'seed': 42, 'res_dir': '/home/zjh/mr/res/downstream/V0/BBBP', 'loss': {'loss_atom_1D': False, 'loss_atom_2D': True, 'loss_atom_3D': True, 'adj_loss': False, 'dist_loss': False, 'angle_loss': False, 'torsion_loss': False, 'agg_method': 'weight', 'alpha': 0.0}, 'log_path': '/home/zjh/mr/res/downstream/V0/BBBP/BBBP.log', 'res_path': '/home/zjh/mr/res/downstream/V0/BBBP/BBBP.csv', 'best_model_path': '/home/zjh/mr/res/downstream/V0/BBBP/BBBP.pth'}
+2023-03-06 19:41:04,887 - utils - INFO - start to load f/home/zjh/mr/downstream/dataset/classify/BBBP/smiles.pth
+2023-03-06 19:41:04,889 - utils - INFO - end to load f/home/zjh/mr/downstream/dataset/classify/BBBP/smiles.pth,spend 0.002177000045776367
+2023-03-06 19:41:04,889 - utils - INFO - start to load f/home/zjh/mr/downstream/dataset/classify/BBBP/label.pth
+2023-03-06 19:41:04,890 - utils - INFO - end to load f/home/zjh/mr/downstream/dataset/classify/BBBP/label.pth,spend 0.000701904296875
+2023-03-06 19:41:04,890 - utils - INFO - start to load f/home/zjh/mr/downstream/dataset/classify/BBBP/dist.pth
+2023-03-06 19:41:04,997 - utils - INFO - end to load f/home/zjh/mr/downstream/dataset/classify/BBBP/dist.pth,spend 0.10735011100769043
+2023-03-06 19:41:04,998 - utils - INFO - start to load f/home/zjh/mr/downstream/dataset/classify/BBBP/torsion.pth
+2023-03-06 19:41:05,615 - utils - INFO - end to load f/home/zjh/mr/downstream/dataset/classify/BBBP/torsion.pth,spend 0.6174356937408447
+2023-03-06 19:41:05,615 - utils - INFO - start to load f/home/zjh/mr/downstream/dataset/classify/BBBP/angle.pth
+2023-03-06 19:41:06,122 - utils - INFO - end to load f/home/zjh/mr/downstream/dataset/classify/BBBP/angle.pth,spend 0.506427526473999
+2023-03-06 19:41:07,499 - utils - INFO - train_size 1612, valid_size201,test_size:202
+2023-03-06 19:41:21,916 - utils - INFO - epoch:0,train_metric:{'loss_total': 0.45672005370701896, 'loss_atom_1D': 0.0, 'loss_atom_2D': 2.8594486713409424, 'loss_atom_3D': 3.0125407629674026, 'loss_adj': 0.0, 'loss_dist': 0.0, 'loss_angle': 0.0, 'loss_torsion': 0.0, 'loss': 5.871989462635304, 'recovery_1D': 1.0, 'recovery_2D': 0.32166445, 'recovery_3D': 0.0013592519, 'downstream_metric': [0.5072434122188655]},valid_metric:{'losses_total': 0.6477887240739969, 'loss_atom_1D': 0.0, 'loss_atom_2D': 2.8641785841721754, 'loss_atom_3D': 3.0030719316922703, 'loss_adj': 0.0, 'loss_dist': 0.0, 'loss_angle': 0.0, 'loss_torsion': 0.0, 'loss': 5.867250552544227, 'recovery_1D': 1.0, 'recovery_2D': 0.465703, 'recovery_3D': 0.0, 'downstream_metric': [0.5646177685950413]}
+2023-03-06 19:41:22,902 - utils - INFO - best_epoch:0,best_downstream_metric:[0.5123820754716981]
+2023-03-06 19:41:36,772 - utils - INFO - epoch:1,train_metric:{'loss_total': 0.3647715537117259, 'loss_atom_1D': 0.0, 'loss_atom_2D': 2.869696607684145, 'loss_atom_3D': 2.9775355546781332, 'loss_adj': 0.0, 'loss_dist': 0.0, 'loss_angle': 0.0, 'loss_torsion': 0.0, 'loss': 5.847232162362278, 'recovery_1D': 1.0, 'recovery_2D': 0.25606272, 'recovery_3D': 0.0041960687, 'downstream_metric': [0.6125325193017792]},valid_metric:{'losses_total': 0.2860709073451849, 'loss_atom_1D': 0.0, 'loss_atom_2D': 2.8823285469642053, 'loss_atom_3D': 2.9617296915787916, 'loss_adj': 0.0, 'loss_dist': 0.0, 'loss_angle': 0.0, 'loss_torsion': 0.0, 'loss': 5.844058220203106, 'recovery_1D': 1.0, 'recovery_2D': 0.46532091, 'recovery_3D': 0.0022526642, 'downstream_metric': [0.9230888429752065]}
+2023-03-06 19:41:37,841 - utils - INFO - best_epoch:1,best_downstream_metric:[0.5642688679245282]
+2023-03-06 19:41:51,919 - utils - INFO - epoch:2,train_metric:{'loss_total': 0.3102750324524275, 'loss_atom_1D': 0.0, 'loss_atom_2D': 2.8858105735023423, 'loss_atom_3D': 2.9834476886409345, 'loss_adj': 0.0, 'loss_dist': 0.0, 'loss_angle': 0.0, 'loss_torsion': 0.0, 'loss': 5.869258257422117, 'recovery_1D': 1.0, 'recovery_2D': 0.18110014, 'recovery_3D': 0.003904003, 'downstream_metric': [0.7297541121181604]},valid_metric:{'losses_total': 0.22113167795424277, 'loss_atom_1D': 0.0, 'loss_atom_2D': 2.8856911109044003, 'loss_atom_3D': 2.9947797701908994, 'loss_adj': 0.0, 'loss_dist': 0.0, 'loss_angle': 0.0, 'loss_torsion': 0.0, 'loss': 5.880470826075627, 'recovery_1D': 1.0, 'recovery_2D': 0.40066475, 'recovery_3D': 0.00034806825, 'downstream_metric': [0.9376033057851239]}
+2023-03-06 19:41:52,729 - utils - INFO - best_epoch:2,best_downstream_metric:[0.6030856918238994]
+2023-03-06 19:42:06,529 - utils - INFO - epoch:3,train_metric:{'loss_total': 0.2847305061572259, 'loss_atom_1D': 0.0, 'loss_atom_2D': 2.8689576233967697, 'loss_atom_3D': 2.978378222720458, 'loss_adj': 0.0, 'loss_dist': 0.0, 'loss_angle': 0.0, 'loss_torsion': 0.0, 'loss': 5.847335867362447, 'recovery_1D': 1.0, 'recovery_2D': 0.21132024, 'recovery_3D': 0.0052188197, 'downstream_metric': [0.7581403155421282]},valid_metric:{'losses_total': 0.19490792831549278, 'loss_atom_1D': 0.0, 'loss_atom_2D': 2.8733728665571947, 'loss_atom_3D': 2.9816526633042555, 'loss_adj': 0.0, 'loss_dist': 0.0, 'loss_angle': 0.0, 'loss_torsion': 0.0, 'loss': 5.85502551152156, 'recovery_1D': 1.0, 'recovery_2D': 0.45216507, 'recovery_3D': 0.0, 'downstream_metric': [0.9584710743801653]}
+2023-03-06 19:42:07,466 - utils - INFO - best_epoch:3,best_downstream_metric:[0.6260809748427673]
+2023-03-06 19:42:21,368 - utils - INFO - epoch:4,train_metric:{'loss_total': 0.2606459130154978, 'loss_atom_1D': 0.0, 'loss_atom_2D': 2.861664108710714, 'loss_atom_3D': 2.988211258803264, 'loss_adj': 0.0, 'loss_dist': 0.0, 'loss_angle': 0.0, 'loss_torsion': 0.0, 'loss': 5.849875379316877, 'recovery_1D': 1.0, 'recovery_2D': 0.21895365, 'recovery_3D': 0.0067376182, 'downstream_metric': [0.7923327878482713]},valid_metric:{'losses_total': 0.10655685370931259, 'loss_atom_1D': 0.0, 'loss_atom_2D': 2.8660047237689676, 'loss_atom_3D': 2.9878990650177, 'loss_adj': 0.0, 'loss_dist': 0.0, 'loss_angle': 0.0, 'loss_torsion': 0.0, 'loss': 5.85390384380634, 'recovery_1D': 1.0, 'recovery_2D': 0.37316328, 'recovery_3D': 0.0023187974, 'downstream_metric': [0.9751033057851238]}
+2023-03-06 19:42:22,386 - utils - INFO - best_epoch:4,best_downstream_metric:[0.6300117924528301]
+2023-03-06 19:42:36,133 - utils - INFO - epoch:5,train_metric:{'loss_total': 0.2588822669395716, 'loss_atom_1D': 0.0, 'loss_atom_2D': 2.8524236136143752, 'loss_atom_3D': 2.975662710643051, 'loss_adj': 0.0, 'loss_dist': 0.0, 'loss_angle': 0.0, 'loss_torsion': 0.0, 'loss': 5.828086319536266, 'recovery_1D': 1.0, 'recovery_2D': 0.20075294, 'recovery_3D': 0.004113625, 'downstream_metric': [0.8085609684457872]},valid_metric:{'losses_total': 0.15878762648655817, 'loss_atom_1D': 0.0, 'loss_atom_2D': 2.842593156374418, 'loss_atom_3D': 2.9860525681422305, 'loss_adj': 0.0, 'loss_dist': 0.0, 'loss_angle': 0.0, 'loss_torsion': 0.0, 'loss': 5.828645742856539, 'recovery_1D': 1.0, 'recovery_2D': 0.3829848, 'recovery_3D': 0.0049831113, 'downstream_metric': [0.9729855371900827]}
+2023-03-06 19:42:49,729 - utils - INFO - epoch:6,train_metric:{'loss_total': 0.24122945200836304, 'loss_atom_1D': 0.0, 'loss_atom_2D': 2.8350723025822404, 'loss_atom_3D': 2.9737048786465485, 'loss_adj': 0.0, 'loss_dist': 0.0, 'loss_angle': 0.0, 'loss_torsion': 0.0, 'loss': 5.808777176507629, 'recovery_1D': 1.0, 'recovery_2D': 0.26343548, 'recovery_3D': 0.0036547096, 'downstream_metric': [0.8152798757972475]},valid_metric:{'losses_total': 0.13932387065142393, 'loss_atom_1D': 0.0, 'loss_atom_2D': 2.82670389688932, 'loss_atom_3D': 2.9824860095977783, 'loss_adj': 0.0, 'loss_dist': 0.0, 'loss_angle': 0.0, 'loss_torsion': 0.0, 'loss': 5.80918994316688, 'recovery_1D': 1.0, 'recovery_2D': 0.29123586, 'recovery_3D': 0.00034806825, 'downstream_metric': [0.94375]}
+2023-03-06 19:43:03,264 - utils - INFO - epoch:7,train_metric:{'loss_total': 0.23822985707533242, 'loss_atom_1D': 0.0, 'loss_atom_2D': 2.828364563460397, 'loss_atom_3D': 2.961928169326027, 'loss_adj': 0.0, 'loss_dist': 0.0, 'loss_angle': 0.0, 'loss_torsion': 0.0, 'loss': 5.790292730425844, 'recovery_1D': 1.0, 'recovery_2D': 0.19064721, 'recovery_3D': 0.00404321, 'downstream_metric': [0.8155054128902316]},valid_metric:{'losses_total': 0.12173283014159936, 'loss_atom_1D': 0.0, 'loss_atom_2D': 2.8329627147087684, 'loss_atom_3D': 2.9693743815788856, 'loss_adj': 0.0, 'loss_dist': 0.0, 'loss_angle': 0.0, 'loss_torsion': 0.0, 'loss': 5.802337132967436, 'recovery_1D': 1.0, 'recovery_2D': 0.37089399, 'recovery_3D': 0.00072514213, 'downstream_metric': [0.96875]}
+2023-03-06 19:43:16,655 - utils - INFO - epoch:8,train_metric:{'loss_total': 0.24080107278089122, 'loss_atom_1D': 0.0, 'loss_atom_2D': 2.8273584559412286, 'loss_atom_3D': 2.958889713381777, 'loss_adj': 0.0, 'loss_dist': 0.0, 'loss_angle': 0.0, 'loss_torsion': 0.0, 'loss': 5.786248159880685, 'recovery_1D': 1.0, 'recovery_2D': 0.22622941, 'recovery_3D': 0.0034067654, 'downstream_metric': [0.8066727509231285]},valid_metric:{'losses_total': 0.1542936676683334, 'loss_atom_1D': 0.0, 'loss_atom_2D': 2.8314474729391246, 'loss_atom_3D': 2.9845043329092174, 'loss_adj': 0.0, 'loss_dist': 0.0, 'loss_angle': 0.0, 'loss_torsion': 0.0, 'loss': 5.815951897547795, 'recovery_1D': 1.0, 'recovery_2D': 0.16306669, 'recovery_3D': 0.0014985015, 'downstream_metric': [0.9833677685950413]}
+2023-03-06 19:43:17,635 - utils - INFO - best_epoch:8,best_downstream_metric:[0.6200864779874213]
+2023-03-06 19:43:31,623 - utils - INFO - epoch:9,train_metric:{'loss_total': 0.2167391547988547, 'loss_atom_1D': 0.0, 'loss_atom_2D': 2.8265020611262557, 'loss_atom_3D': 2.9681747951129878, 'loss_adj': 0.0, 'loss_dist': 0.0, 'loss_angle': 0.0, 'loss_torsion': 0.0, 'loss': 5.794676856239243, 'recovery_1D': 1.0, 'recovery_2D': 0.1320866, 'recovery_3D': 0.0035454407, 'downstream_metric': [0.8386046072507554]},valid_metric:{'losses_total': 0.11982539038245495, 'loss_atom_1D': 0.0, 'loss_atom_2D': 2.8351150292616625, 'loss_atom_3D': 2.979823112487793, 'loss_adj': 0.0, 'loss_dist': 0.0, 'loss_angle': 0.0, 'loss_torsion': 0.0, 'loss': 5.814938031710112, 'recovery_1D': 1.0, 'recovery_2D': 0.34037018, 'recovery_3D': 0.0029296947, 'downstream_metric': [0.9562499999999999]}
+2023-03-06 19:43:45,604 - utils - INFO - epoch:10,train_metric:{'loss_total': 0.21646835987852647, 'loss_atom_1D': 0.0, 'loss_atom_2D': 2.8305870424402824, 'loss_atom_3D': 2.970808498930223, 'loss_adj': 0.0, 'loss_dist': 0.0, 'loss_angle': 0.0, 'loss_torsion': 0.0, 'loss': 5.801395520125285, 'recovery_1D': 1.0, 'recovery_2D': 0.18895133, 'recovery_3D': 0.0032214841, 'downstream_metric': [0.8368684961396442]},valid_metric:{'losses_total': 0.099031918323957, 'loss_atom_1D': 0.0, 'loss_atom_2D': 2.8348342271951528, 'loss_atom_3D': 2.985505544222318, 'loss_adj': 0.0, 'loss_dist': 0.0, 'loss_angle': 0.0, 'loss_torsion': 0.0, 'loss': 5.820339826437143, 'recovery_1D': 1.0, 'recovery_2D': 0.11860314, 'recovery_3D': 0.0026426935, 'downstream_metric': [0.96875]}
