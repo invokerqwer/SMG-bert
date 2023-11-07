@@ -12,14 +12,14 @@ run10 : 引入3D 信息， 距离 + 重建 + torsion
 run11 1D + 2D mgbert
 
 
-v6 v7 验证3D 下gcn作用
+run6 run7 验证3D 下gcn作用
 
-v1 v8 验证2D 下gcn作用
+run1 run8 验证2D 下gcn作用
 
-v1 v11 验证 1D作用
+run1 run11 验证 1D作用
 
-V2 V3 V9 V10 V6验证3D各个loss项的作用
+run2 run3 run9 run10 run6验证3D各个loss项的作用
 
-V4 v7 验证loss_adj
+run4 run7 验证loss_adj
 
 
