@@ -1,15 +1,15 @@
-V1 : 这个就是mg-bert
-V2 : 引入3D 信息，只预测距离（不重建3D 的原子)
-V3 : 引入3D 信息， 距离 + 重建
-V4 : 引入3D 信息,所有的都用上，包括gcn 也显示加入； train 不起来
-V5 : 引入3D 信息,所有的都用上，除了不用gcn matrix; train 不起来
-V6 ：引入3D 信息 没有loss_adj 不用gcn matrix train 起来了
-v7: 引入3D 信息 没有loss_adj 使用gcn
-v8: 这个就是mg-bert+gcn
-v9 : 引入3D 信息， 距离 + 重建 + angle
-v10 : 引入3D 信息， 距离 + 重建 + torsion
+run1 : 这个就是mg-bert
+run2 : 引入3D 信息，只预测距离（不重建3D 的原子)
+run3 : 引入3D 信息， 距离 + 重建
+run4 : 引入3D 信息,所有的都用上，包括gcn 也显示加入； train 不起来
+run5 : 引入3D 信息,所有的都用上，除了不用gcn matrix; train 不起来
+run6 ：引入3D 信息 没有loss_adj 不用gcn matrix train 起来了
+run7: 引入3D 信息 没有loss_adj 使用gcn
+run8: 这个就是mg-bert+gcn
+run9 : 引入3D 信息， 距离 + 重建 + angle
+run10 : 引入3D 信息， 距离 + 重建 + torsion
 
-v11 1D + 2D mgbert
+run11 1D + 2D mgbert
 
 
 v6 v7 验证3D 下gcn作用
